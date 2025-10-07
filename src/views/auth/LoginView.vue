@@ -1,0 +1,79 @@
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+import { useAuth } from '@/composables/auth'
+import { Card, InputText, Message, Button } from 'primevue'
+import { Form, type FormSubmitEvent } from '@primevue/forms'
+import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { loginSchema } from '@/schemas/auth.schema'
+import GoogleLogo from '@/assets/icons/GoogleLogo.vue'
+
+const initialValues = reactive({
+  email: '',
+  password: '',
+})
+
+const resolver = ref(zodResolver(loginSchema))
+
+const { handleLoginWithGoogle, handleLoginWithEmailAndPassword } = useAuth()
+
+const onFormSubmit = (e: FormSubmitEvent) => {
+  const { valid, values } = e
+
+  if (valid) {
+    const { email, password } = values
+
+    handleLoginWithEmailAndPassword(email, password)
+  }
+}
+</script>
+
+<template>
+  <div class="max-w-lg p-4 rounded mx-auto">
+    <Card>
+      <template #title>Login Form</template>
+      <template #subtitle> Fill the form to login </template>
+      <template #content>
+        <Form
+          class="flex flex-col gap-4 w-full"
+          v-slot="$form"
+          :initialValues
+          :resolver
+          @submit="onFormSubmit"
+        >
+          <div class="flex flex-col gap-1">
+            <label for="email">Email</label>
+            <InputText type="email" name="email" id="email" placeholder="johndoe@gmail.com" />
+            <Message v-if="$form.email?.invalid" severity="error" size="small" variant="simple">
+              {{ $form.email.error?.message }}
+            </Message>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label for="password">Password</label>
+            <InputText type="password" name="password" id="password" placeholder="•••••••" />
+            <Message v-if="$form.password?.invalid" severity="error" size="small" variant="simple">
+              {{ $form.password.error?.message }}
+            </Message>
+          </div>
+          <Button type="submit">Login</Button>
+          <Button
+            type="button"
+            severity="primary"
+            variant="outlined"
+            @click="handleLoginWithGoogle"
+          >
+            <GoogleLogo />
+            Login with Google
+          </Button>
+        </Form>
+      </template>
+      <template #footer>
+        <div class="flex justify-end">
+          <p class="text-sm text-gray-300">
+            You dont have an account?
+            <RouterLink class="underline" :to="{ name: 'signup' }">Sign Up</RouterLink>
+          </p>
+        </div>
+      </template>
+    </Card>
+  </div>
+</template>

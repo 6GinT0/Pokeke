@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import Button from 'primevue/button'
+import { useCurrentUser } from 'vuefire'
+
+const user = useCurrentUser()
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <Button>Hola</Button>
+    <p v-if="user">Hello {{ user.providerData[0]?.displayName }}</p>
   </main>
 </template>
