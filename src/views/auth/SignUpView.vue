@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
+import { useAsyncState } from '@vueuse/core'
 import { useAuth } from '@/composables/auth'
 import { Card, InputText, Message, Button } from 'primevue'
 import { Form, type FormSubmitEvent } from '@primevue/forms'
@@ -15,16 +16,29 @@ const initialValues = reactive({
 })
 
 const resolver = ref(zodResolver(signupSchema))
+const isEmailAuthLoading = ref(false)
 
 const { handleLoginWithGoogle, handleSignUpWithEmailAndPassword } = useAuth()
 
-const onFormSubmit = (e: FormSubmitEvent) => {
+const { isLoading: isGoogleAuthLoading, execute: executeHandleLoginWithGoogle } = useAsyncState(
+  () => handleLoginWithGoogle(),
+  null,
+  {
+    immediate: false,
+  },
+)
+
+const onFormSubmit = async (e: FormSubmitEvent) => {
   const { valid, values } = e
 
   if (valid) {
+    isEmailAuthLoading.value = true
+
     const { displayName, email, password } = values
 
-    handleSignUpWithEmailAndPassword(displayName, email, password)
+    await handleSignUpWithEmailAndPassword(displayName, email, password)
+
+    isEmailAuthLoading.value = false
   }
 }
 </script>
@@ -85,12 +99,15 @@ const onFormSubmit = (e: FormSubmitEvent) => {
               {{ $form.confirmPassword.error?.message }}
             </Message>
           </div>
-          <Button type="submit">Sign Up</Button>
+          <Button type="submit" :disabled="isGoogleAuthLoading || isEmailAuthLoading">
+            Sign Up
+          </Button>
           <Button
             type="button"
             severity="primary"
             variant="outlined"
-            @click="handleLoginWithGoogle"
+            :disabled="isGoogleAuthLoading || isEmailAuthLoading"
+            @click="() => executeHandleLoginWithGoogle()"
           >
             <GoogleLogo />
             Login with Google
