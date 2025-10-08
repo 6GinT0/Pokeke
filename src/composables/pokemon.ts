@@ -1,12 +1,18 @@
 import { ref } from 'vue'
+import { useToast } from 'primevue'
 import { getCurrentUser } from 'vuefire'
 import { query, where, collection, doc, getDocs } from 'firebase/firestore'
 import { db } from '@/config/firebase'
+import PokemonService from '@/services/pokemon.service'
 import type { Ref } from 'vue'
 import type { Pokemon } from '@/types/pokemon'
+import { useRouter } from 'vue-router'
 
 export const usePokemon = () => {
   const pokedex: Ref<Pokemon[]> = ref([])
+  const router = useRouter()
+  const toast = useToast()
+  const pokemonService = PokemonService.getInstance()
 
   async function getPokedex() {
     const currentUserData = await getCurrentUser()
@@ -48,8 +54,48 @@ export const usePokemon = () => {
     }
   }
 
+  async function handleRandomPokemonPurchase() {
+    const currentUserData = await getCurrentUser()
+
+    if (!currentUserData?.uid) {
+      router.push({
+        name: 'login',
+      })
+    }
+
+    const { success, error } = await pokemonService.purchaseRandomPokemon(currentUserData!.uid)
+
+    if (!success) {
+      toast.add({
+        severity: 'warn',
+        summary: error,
+      })
+    }
+  }
+
+  async function handleUnlockAll() {
+    const currentUserData = await getCurrentUser()
+
+    if (!currentUserData?.uid) {
+      router.push({
+        name: 'login',
+      })
+    }
+
+    const { success, error } = await pokemonService.purchaseRandomPokemon(currentUserData!.uid)
+
+    if (!success) {
+      toast.add({
+        severity: 'warn',
+        summary: error,
+      })
+    }
+  }
+
   return {
     pokedex,
     getPokedex,
+    handleRandomPokemonPurchase,
+    handleUnlockAll,
   }
 }

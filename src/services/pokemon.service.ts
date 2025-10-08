@@ -1,6 +1,15 @@
 import { pokemonBaseUrl } from '@/lib/axios'
 import { getRandomInt } from '@/utils/randomInt'
-import { collection, query, where, getDocs, setDoc, doc, increment } from 'firebase/firestore'
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  setDoc,
+  doc,
+  increment,
+  deleteDoc,
+} from 'firebase/firestore'
 import { db } from '@/config/firebase'
 import type { PokedexRaw, PurchasePokemon } from '@/types/pokemon'
 
@@ -108,6 +117,40 @@ export default class PokemonService {
         success: true,
         data: randomPokemon,
       }
+    }
+  }
+
+  public async unlockAll(userUid: string): Promise<void | {
+    success: boolean
+    error: string
+  }> {
+    const q = query(collection(db, 'users'), where('uid', '==', userUid))
+
+    const querySnapshot = await getDocs(q)
+
+    if (querySnapshot.empty) {
+      return {
+        success: false,
+        error: 'User not found',
+      }
+    } else {
+      await setDoc(doc(db, 'users', querySnapshot.docs[0]!.id), {
+        ...querySnapshot.docs[0]!.data(),
+        coins: 10000000,
+        cheat: true,
+      })
+
+      const querySnapshotDoc = querySnapshot.docs[0]
+
+      const pokedexRef = collection(db, 'users', querySnapshotDoc!.id, 'rawPokedex')
+
+      const pokedexSnapshot = await getDocs(pokedexRef)
+
+      const deletePokemonsPromises = pokedexSnapshot.docs.map((docSnap) =>
+        deleteDoc(doc(db, 'users', querySnapshotDoc!.id, 'rawPokedex', docSnap.id)),
+      )
+
+      await Promise.all(deletePokemonsPromises)
     }
   }
 }
