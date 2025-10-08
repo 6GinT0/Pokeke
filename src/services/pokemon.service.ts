@@ -1,8 +1,11 @@
 import { pokemonBaseUrl } from '@/lib/axios'
 import { getRandomInt } from '@/utils/randomInt'
-import type { PokedexRaw } from '@/types/pokemon'
+import { collection, query, where, getDocs, setDoc, doc, increment } from 'firebase/firestore'
+import { db } from '@/config/firebase'
+import type { PokedexRaw, PurchasePokemon } from '@/types/pokemon'
 
 export default class PokemonService {
+  private PRICE = 250
   private static instance: PokemonService | null = null
 
   private constructor() {}
@@ -39,5 +42,72 @@ export default class PokemonService {
     }
 
     return pokemons
+  }
+
+  public async purchaseRandomPokemon(userUid: string): Promise<PurchasePokemon> {
+    const pokedex = await this.getPokedex()
+    const index = getRandomInt(1, pokedex.length)
+    const randomPokemon = pokedex[index]!
+
+    const q = query(collection(db, 'users'), where('uid', '==', userUid))
+
+    const querySnapshot = await getDocs(q)
+
+    if (querySnapshot.empty) {
+      return {
+        success: false,
+        error: 'User not found',
+      }
+    }
+
+    const querySnapshotDoc = querySnapshot.docs[0]
+
+    const querySnapshotData = querySnapshotDoc?.data()
+
+    if (querySnapshotData!.coins < this.PRICE) {
+      return {
+        success: false,
+        error: 'Not enough coins',
+      }
+    } else {
+      await setDoc(doc(db, 'users', querySnapshotDoc!.id), {
+        ...querySnapshotData,
+        coins: querySnapshotData!.coins - this.PRICE,
+      })
+
+      const pokedexRef = collection(db, 'users', querySnapshotDoc!.id, 'rawPokedex')
+
+      const pokedexSnapshot = await getDocs(pokedexRef)
+
+      const pokedexSnapshotData = pokedexSnapshot.docs.map((el) => ({
+        ...el.data(),
+      }))
+
+      if (pokedexSnapshotData.some((pokemon) => pokemon.name === randomPokemon.name)) {
+        await setDoc(
+          doc(db, 'users', querySnapshotDoc!.id),
+          {
+            ...querySnapshotData,
+            coins: increment(50),
+          },
+          { merge: true },
+        )
+
+        return {
+          success: false,
+          error: 'Pokemon already in pokedex',
+        }
+      }
+
+      await setDoc(doc(collection(db, 'users', querySnapshotDoc!.id, 'rawPokedex')), {
+        ...randomPokemon,
+        caughtAt: new Date(),
+      })
+
+      return {
+        success: true,
+        data: randomPokemon,
+      }
+    }
   }
 }

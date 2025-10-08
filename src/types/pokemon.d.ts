@@ -396,3 +396,9 @@ export interface PokedexRaw {
   name: string
   url: string
 }
+
+export interface PurchasePokemon {
+  success: boolean
+  error?: string
+  data?: PokedexRaw
+}

@@ -14,6 +14,23 @@ const router = createRouter({
       },
     },
     {
+      path: '/pokedex',
+      name: 'pokedex',
+      component: () => import('@/views/PokedexView.vue'),
+      meta: {
+        title: 'Pokedex',
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/shop',
+      name: 'shop',
+      component: () => import('@/views/ShopView.vue'),
+      meta: {
+        title: 'Shopping',
+      },
+    },
+    {
       path: '/auth',
       redirect: () => ({ name: 'login' }),
       children: [
