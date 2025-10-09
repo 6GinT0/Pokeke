@@ -58,12 +58,14 @@ export const usePokemon = () => {
     const currentUserData = await getCurrentUser()
 
     if (!currentUserData?.uid) {
-      router.push({
+      return router.push({
         name: 'login',
       })
     }
 
-    const { success, error } = await pokemonService.purchaseRandomPokemon(currentUserData!.uid)
+    const { success, data, error } = await pokemonService.purchaseRandomPokemon(
+      currentUserData!.uid,
+    )
 
     if (!success) {
       toast.add({
@@ -71,13 +73,15 @@ export const usePokemon = () => {
         summary: error,
       })
     }
+
+    return data
   }
 
   async function handleUnlockAll() {
     const currentUserData = await getCurrentUser()
 
     if (!currentUserData?.uid) {
-      router.push({
+      return router.push({
         name: 'login',
       })
     }

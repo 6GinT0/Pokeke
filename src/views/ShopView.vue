@@ -2,14 +2,17 @@
 import { ref, computed, watch, useTemplateRef } from 'vue'
 import { useAsyncState, useElementVisibility } from '@vueuse/core'
 import { usePokemon } from '@/composables/pokemon'
+import { useDialog } from '@/composables/dialog'
 import { useUser } from '@/composables/user'
 import type { Pokemon, PokedexRaw } from '@/types/pokemon'
 import { Button } from 'primevue'
-import PokemonCard from '@/components/PokemonCard.vue'
+import PokemonCard from '@/components/pokemon/PokemonCard.vue'
+import PokemonDialog from '@/components/pokemon/PokemonDialog.vue'
 
 const page = ref(1)
 const target = useTemplateRef<HTMLDivElement>('target')
 const pokemons = ref<Pokemon[]>([])
+const { dialogVisible, pokemonToShow, closeDialog, handleBuy } = useDialog()
 const { user } = useUser()
 const { handleRandomPokemonPurchase, handleUnlockAll } = usePokemon()
 const { isLoading, execute } = useAsyncState(
@@ -64,7 +67,7 @@ watch(targetIsVisible, () => {
     <Button
       v-if="!currentUserIsCheating"
       class="cursor-pointer bg-red-500 px-3 py-5"
-      @click="handleRandomPokemonPurchase"
+      @click="handleBuy(handleRandomPokemonPurchase)"
     >
       $250 (Random Pokemon)
     </Button>
@@ -81,4 +84,6 @@ watch(targetIsVisible, () => {
   </div>
 
   <div v-if="!isLoading" class="sr-only h-10" ref="target" />
+
+  <PokemonDialog v-model:visible="dialogVisible" :pokemon="pokemonToShow" @close="closeDialog" />
 </template>

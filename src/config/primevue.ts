@@ -51,5 +51,43 @@ export const CustomPreset = definePreset(Aura, {
         },
       },
     },
+    menu: {
+      root: {
+        background: '{zinc.800}',
+        borderColor: '{zinc.600}',
+        color: '#fafafa',
+      },
+      colorScheme: {
+        light: {
+          item: {
+            color: '#fafafa',
+            focusColor: '#fafafa',
+            focusBackground: '{zinc.700}',
+          },
+        },
+      },
+    },
+    menubar: {
+      root: {
+        background: '{zinc.800}',
+        borderColor: 'none',
+      },
+      colorScheme: {
+        light: {
+          item: {
+            color: '#fafafa',
+            focusColor: '#fafafa',
+            focusBackground: '{zinc.700}',
+          },
+        },
+      },
+    },
+    dialog: {
+      root: {
+        background: '{zinc.800}',
+        color: '#fafafa',
+        borderColor: '{zinc.600}',
+      },
+    },
   },
 })

@@ -55,23 +55,21 @@ const toggleCartMenu = (event: Event) => {
     <div class="container mx-auto flex items-center justify-between p-2">
       <h2>Logo</h2>
       <div class="flex items-center gap-6">
-        <div class="card">
-          <Menubar :model="items">
-            <template #item="{ item, props, hasSubmenu }">
-              <RouterLink v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-                <a :href="href" v-bind="props.action" @click="navigate">
-                  <span :class="item.icon" />
-                  <span>{{ item.label }}</span>
-                </a>
-              </RouterLink>
-              <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+        <Menubar :model="items">
+          <template #item="{ item, props, hasSubmenu }">
+            <RouterLink v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+              <a :href="href" v-bind="props.action" @click="navigate">
                 <span :class="item.icon" />
                 <span>{{ item.label }}</span>
-                <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down" />
               </a>
-            </template>
-          </Menubar>
-        </div>
+            </RouterLink>
+            <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+              <span :class="item.icon" />
+              <span>{{ item.label }}</span>
+              <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down" />
+            </a>
+          </template>
+        </Menubar>
 
         <Button
           v-if="currentUser"
@@ -88,7 +86,7 @@ const toggleCartMenu = (event: Event) => {
           class="flex flex-col p-2"
         >
           <template #item="{ item }">
-            <div class="flex items-center gap-x-2">
+            <div class="flex items-center gap-x-2 p-2">
               <Avatar />
               <span>{{ formattedString(item.name) }}</span>
             </div>

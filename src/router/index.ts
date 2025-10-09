@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 /* Views */
 import HomeView from '@/views/HomeView.vue'
+/* Others */
+import { getCurrentUser } from 'vuefire'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +21,15 @@ const router = createRouter({
       component: () => import('@/views/PokedexView.vue'),
       meta: {
         title: 'Pokedex',
+        requiresAuth: true,
+      },
+    },
+    {
+      path: '/battle',
+      name: 'battle',
+      component: () => import('@/views/BattleView.vue'),
+      meta: {
+        title: 'Battle',
         requiresAuth: true,
       },
     },
@@ -59,6 +70,18 @@ router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | Pokeke`
 
   next()
+})
+
+router.beforeEach(async (to) => {
+  if (to.meta.requiresAuth) {
+    const currentUser = await getCurrentUser()
+
+    if (!currentUser) {
+      return {
+        path: '/auth/login',
+      }
+    }
+  }
 })
 
 export default router

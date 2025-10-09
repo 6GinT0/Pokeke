@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { toRefs } from 'vue'
+import { ref, toRefs } from 'vue'
 import { formattedString } from '@/utils/pokemonName'
 import type { Pokemon } from '@/types/pokemon'
 import PokeballC from '@/components/PokeballC.vue'
+import { Dialog } from 'primevue'
 
 const props = defineProps<{
   pokemon: Pokemon
+  routeInPokedex?: boolean
 }>()
 
+const visible = ref(false)
 const { pokemon } = toRefs(props)
 </script>
 
@@ -23,16 +26,50 @@ const { pokemon } = toRefs(props)
       />
     </div>
     <div class="card__avatar bg-zinc-800">
-      <PokeballC />
+      <PokeballC @click="visible = true" />
     </div>
     <div class="card__title">{{ formattedString(pokemon.name) }}</div>
   </div>
+
+  <Dialog
+    v-if="routeInPokedex"
+    v-model:visible="visible"
+    modal
+    :header="formattedString(pokemon.name)"
+    :style="{ width: '25rem' }"
+  >
+    <div
+      class="card__dialog flex flex-col items-center overflow-hidden rounded-xl border-3 border-zinc-700 bg-zinc-800"
+    >
+      <div class="flex h-[192px] w-full items-center justify-center bg-rose-500">
+        <img
+          :src="pokemon.sprites.other['official-artwork'].front_default"
+          :alt="pokemon.name"
+          class="h-full w-full object-contain"
+        />
+      </div>
+      <div class="my-4 flex w-full flex-col justify-start px-4 py-2">
+        <div v-for="(stat, idx) in pokemon.stats" class="flex gap-x-2" :key="idx">
+          <div>{{ formattedString(stat.stat.name) }}:</div>
+          <div>{{ stat.base_stat }}</div>
+        </div>
+      </div>
+    </div>
+  </Dialog>
 </template>
 
 <style scoped>
 .card {
   position: relative;
   height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.card__dialog {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
