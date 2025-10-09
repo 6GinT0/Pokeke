@@ -6,10 +6,13 @@ export const useDialog = () => {
   const dialogVisible = ref(false)
   const pokemonToShow = ref<PokedexRaw | null>(null)
 
-  async function handleBuy(cb: () => Promise<PokedexRaw | void | NavigationFailure>) {
-    const pokemon = (await cb()) as PokedexRaw
+  async function openDialogWithPokemon(
+    cb: () => Promise<PokedexRaw | void | NavigationFailure>,
+  ) {
+    const result = await cb()
 
-    if (pokemon) {
+    if (result && typeof result === 'object' && 'name' in result && 'url' in result) {
+      const pokemon = result as PokedexRaw
       pokemonToShow.value = pokemon
       dialogVisible.value = true
     }
@@ -24,6 +27,6 @@ export const useDialog = () => {
     dialogVisible,
     pokemonToShow,
     closeDialog,
-    handleBuy,
+    openDialogWithPokemon,
   }
 }

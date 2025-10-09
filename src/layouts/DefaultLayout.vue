@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import FooterC from '@/components/FooterC.vue'
-import HeaderC from '@/components/HeaderC.vue'
+import AppHeader from '@/components/AppHeader.vue'
 </script>
 
 <template>
-  <HeaderC />
-
+  <AppHeader />
   <main class="container mx-auto">
     <slot />
   </main>

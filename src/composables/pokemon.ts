@@ -14,58 +14,62 @@ export const usePokemon = () => {
   const toast = useToast()
   const pokemonService = PokemonService.getInstance()
 
-  async function getPokedex() {
-    const currentUserData = await getCurrentUser()
-    const usersRef = collection(db, 'users')
+  async function getUserData() {
+    const currentUser = await getCurrentUser()
+    if (!currentUser?.uid) {
+      router.push({ name: 'login' })
+      return null
+    }
 
-    const q = query(usersRef, where('uid', '==', currentUserData?.uid))
+    const usersRef = collection(db, 'users')
+    const q = query(usersRef, where('uid', '==', currentUser.uid))
     const querySnapshot = await getDocs(q)
 
+    if (querySnapshot.empty) {
+      return null
+    }
+
     const userDoc = querySnapshot.docs[0]
-    const userData = userDoc?.data()
-    const userDocRef = doc(db, 'users', userDoc!.id)
+    const userData = userDoc.data()
+    const userDocRef = doc(db, 'users', userDoc.id)
 
-    if (!userData?.cheat) {
-      const pokedexRef = collection(userDocRef, 'rawPokedex')
-      const pokedexSnapshot = await getDocs(pokedexRef)
+    return { userData, userDocRef, uid: currentUser.uid }
+  }
 
-      const pokemons = pokedexSnapshot.docs.map((doc) => ({
-        ...doc.data(),
-      }))
+  async function getPokedex() {
+    const userInfo = await getUserData()
+    if (!userInfo) return { success: false, message: 'User not found' }
 
-      const pokemonPromises = pokemons.map((pokemon): Promise<Pokemon> => {
-        return new Promise((resolve) => {
-          resolve(fetch(pokemon.url).then((res) => res.json()))
-        })
-      })
+    const { userData, userDocRef } = userInfo
 
-      const pokemonData = await Promise.all(pokemonPromises)
-
-      pokedex.value = pokemonData as Pokemon[]
-
+    if (userData?.cheat) {
       return {
-        success: true,
+        success: false,
+        message: 'Cheats are enabled',
       }
     }
 
+    const pokedexRef = collection(userDocRef, 'rawPokedex')
+    const pokedexSnapshot = await getDocs(pokedexRef)
+
+    const pokemons = pokedexSnapshot.docs.map((doc) => doc.data())
+
+    const pokemonPromises = pokemons.map((pokemon) =>
+      fetch(pokemon.url).then((res) => res.json()),
+    )
+
+    pokedex.value = await Promise.all(pokemonPromises)
+
     return {
-      success: false,
-      message: 'Cheats are enabled',
+      success: true,
     }
   }
 
   async function handleRandomPokemonPurchase() {
-    const currentUserData = await getCurrentUser()
+    const userInfo = await getUserData()
+    if (!userInfo) return
 
-    if (!currentUserData?.uid) {
-      return router.push({
-        name: 'login',
-      })
-    }
-
-    const { success, data, error } = await pokemonService.purchaseRandomPokemon(
-      currentUserData!.uid,
-    )
+    const { success, data, error } = await pokemonService.purchaseRandomPokemon(userInfo.uid)
 
     if (!success) {
       toast.add({
@@ -78,22 +82,19 @@ export const usePokemon = () => {
   }
 
   async function handleUnlockAll() {
-    const currentUserData = await getCurrentUser()
+    const userInfo = await getUserData()
+    if (!userInfo) return
 
-    if (!currentUserData?.uid) {
-      return router.push({
-        name: 'login',
-      })
-    }
+    await pokemonService.unlockAll(userInfo.uid)
 
-    const { success, error } = await pokemonService.purchaseRandomPokemon(currentUserData!.uid)
+    toast.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'All Pokemon unlocked!',
+      life: 3000,
+    })
 
-    if (!success) {
-      toast.add({
-        severity: 'warn',
-        summary: error,
-      })
-    }
+    window.location.reload()
   }
 
   return {

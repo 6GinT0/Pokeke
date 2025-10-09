@@ -8,6 +8,8 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  type User,
+  type UserCredential,
 } from 'firebase/auth'
 import { collection, query, where, getDocs, addDoc } from 'firebase/firestore'
 import { db } from '@/config/firebase'
@@ -21,19 +23,16 @@ export default class FirebaseAuthService {
 
   constructor() {}
 
-  public async signUpWithEmailAndPassword(
-    displayName: string,
-    email: string,
-    password: string,
+  private async handleAuthRequest(
+    authFunction: Promise<UserCredential>,
+    customLogic?: (user: User) => Promise<void>,
   ): Promise<FirebaseAuthResult> {
     try {
-      const { user } = await createUserWithEmailAndPassword(this.auth, email, password)
+      const { user } = await authFunction
 
-      await updateProfile(user, {
-        displayName,
-      })
-
-      await this.createUser(user.uid)
+      if (customLogic) {
+        await customLogic(user)
+      }
 
       return {
         success: true,
@@ -52,57 +51,33 @@ export default class FirebaseAuthService {
         error: 'Something went wrong',
       }
     }
+  }
+
+  public async signUpWithEmailAndPassword(
+    displayName: string,
+    email: string,
+    password: string,
+  ): Promise<FirebaseAuthResult> {
+    return this.handleAuthRequest(
+      createUserWithEmailAndPassword(this.auth, email, password),
+      async (user) => {
+        await updateProfile(user, { displayName })
+        await this.createUser(user.uid)
+      },
+    )
   }
 
   public async loginWithEmailAndPassword(
     email: string,
     password: string,
   ): Promise<FirebaseAuthResult> {
-    try {
-      const { user } = await signInWithEmailAndPassword(this.auth, email, password)
-
-      return {
-        success: true,
-        user,
-      }
-    } catch (e: unknown) {
-      if (e instanceof FirebaseError) {
-        return {
-          success: false,
-          error: getFirebaseErrorMessage(e.code),
-        }
-      }
-
-      return {
-        success: false,
-        error: 'Something went wrong',
-      }
-    }
+    return this.handleAuthRequest(signInWithEmailAndPassword(this.auth, email, password))
   }
 
   public async loginWithGoogle(): Promise<FirebaseAuthResult> {
-    try {
-      const { user } = await signInWithPopup(this.auth, this.googleAuthProvider)
-
-      await this.createUser(user.uid)
-
-      return {
-        success: true,
-        user,
-      }
-    } catch (e: unknown) {
-      if (e instanceof FirebaseError) {
-        return {
-          success: false,
-          error: getFirebaseErrorMessage(e.code),
-        }
-      }
-
-      return {
-        success: false,
-        error: 'Something went wrong',
-      }
-    }
+    return this.handleAuthRequest(signInWithPopup(this.auth, this.googleAuthProvider), (user) =>
+      this.createUser(user.uid),
+    )
   }
 
   public async logout(): Promise<void> {

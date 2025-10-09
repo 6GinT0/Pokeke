@@ -12,8 +12,8 @@ import PokemonDialog from '@/components/pokemon/PokemonDialog.vue'
 const page = ref(1)
 const target = useTemplateRef<HTMLDivElement>('target')
 const pokemons = ref<Pokemon[]>([])
-const { dialogVisible, pokemonToShow, closeDialog, handleBuy } = useDialog()
-const { user } = useUser()
+const { dialogVisible, pokemonToShow, closeDialog, openDialogWithPokemon } = useDialog()
+const { userData } = useUser()
 const { handleRandomPokemonPurchase, handleUnlockAll } = usePokemon()
 const { isLoading, execute } = useAsyncState(
   async () => {
@@ -42,7 +42,7 @@ const { isLoading, execute } = useAsyncState(
 )
 
 const currentUserIsCheating = computed(() => {
-  return user.value[0]?.cheat
+  return userData.value?.cheat
 })
 
 const targetIsVisible = useElementVisibility(target, {
@@ -67,7 +67,7 @@ watch(targetIsVisible, () => {
     <Button
       v-if="!currentUserIsCheating"
       class="cursor-pointer bg-red-500 px-3 py-5"
-      @click="handleBuy(handleRandomPokemonPurchase)"
+      @click="openDialogWithPokemon(handleRandomPokemonPurchase)"
     >
       $250 (Random Pokemon)
     </Button>

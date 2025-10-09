@@ -9,7 +9,6 @@ import { firebaseApp } from './config/firebase'
 /* PrimeVue */
 import PrimeVue from 'primevue/config'
 import { CustomPreset } from './config/primevue'
-/* Other */
 import ToastService from 'primevue/toastservice'
 
 const app = createApp(App)
@@ -24,7 +23,7 @@ app.use(PrimeVue, {
   theme: {
     preset: CustomPreset,
     options: {
-      darkModeSelector: false || 'none',
+      darkModeSelector: 'none',
     },
   },
 })

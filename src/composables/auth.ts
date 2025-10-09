@@ -7,6 +7,26 @@ export const useAuth = () => {
   const toast = useToast()
   const firebaseAuthService = new FirebaseAuthService()
 
+  async function handleAuthResult(result: { success: boolean; error?: string }) {
+    if (result.success) {
+      toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Logged in successfully',
+        life: 3000,
+      })
+
+      router.push('/')
+    } else {
+      toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: result.error,
+        life: 3000,
+      })
+    }
+  }
+
   async function handleSignUpWithEmailAndPassword(
     displayName: string,
     email: string,
@@ -17,68 +37,17 @@ export const useAuth = () => {
       email,
       password,
     )
-
-    if (result.success) {
-      toast.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Logged in successfully',
-        life: 3000,
-      })
-
-      router.push('/')
-    } else {
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: result.error,
-        life: 3000,
-      })
-    }
+    await handleAuthResult(result)
   }
 
   async function handleLoginWithEmailAndPassword(email: string, password: string) {
     const result = await firebaseAuthService.loginWithEmailAndPassword(email, password)
-
-    if (result.success) {
-      toast.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Logged in successfully',
-        life: 3000,
-      })
-
-      router.push('/')
-    } else {
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: result.error,
-        life: 3000,
-      })
-    }
+    await handleAuthResult(result)
   }
 
   async function handleLoginWithGoogle() {
     const result = await firebaseAuthService.loginWithGoogle()
-
-    if (result.success) {
-      toast.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Logged in successfully',
-        life: 3000,
-      })
-
-      router.push('/')
-    } else {
-      toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: result.error,
-        life: 3000,
-      })
-    }
+    await handleAuthResult(result)
   }
 
   async function handleLogout() {

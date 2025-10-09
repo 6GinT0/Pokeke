@@ -4,17 +4,20 @@ import { collection, query, where } from 'firebase/firestore'
 import { db } from '@/config/firebase'
 
 export const useUser = () => {
-  const user = useCurrentUser()
+  const currentUser = useCurrentUser()
 
   const userQuery = computed(() => {
-    if (!user.value) return null
+    if (!currentUser.value) return null
 
-    return query(collection(db, 'users'), where('uid', '==', user.value.uid))
+    return query(collection(db, 'users'), where('uid', '==', currentUser.value.uid))
   })
 
   const users = useCollection(userQuery)
 
+  const userData = computed(() => (users.value[0] ? users.value[0] : null))
+
   return {
-    user: users,
+    user: currentUser,
+    userData,
   }
 }

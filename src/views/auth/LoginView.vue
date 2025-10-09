@@ -42,13 +42,13 @@ const onFormSubmit = async (e: FormSubmitEvent) => {
 </script>
 
 <template>
-  <div class="max-w-lg p-4 rounded mx-auto">
+  <div class="mx-auto max-w-lg rounded p-4">
     <Card>
       <template #title>Login Form</template>
       <template #subtitle> Fill the form to login </template>
       <template #content>
         <Form
-          class="flex flex-col gap-4 w-full"
+          class="flex w-full flex-col gap-4"
           v-slot="$form"
           :initialValues
           :resolver
