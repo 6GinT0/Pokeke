@@ -43,9 +43,14 @@ export const useUser = () => {
 
   const userData = computed(() => (users.value[0] ? users.value[0] : null))
 
+  const currentUserIsCheating = computed(() => {
+    return userData.value?.cheat
+  })
+
   return {
     user: currentUser,
     userData,
+    currentUserIsCheating,
     pokedex,
     pokemonInPokedex,
   }
