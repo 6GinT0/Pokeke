@@ -90,5 +90,12 @@ export const CustomPreset = definePreset(Aura, {
         borderColor: '{zinc.600}',
       },
     },
+    drawer: {
+      root: {
+        background: '{zinc.800}',
+        color: '#fafafa',
+        borderColor: '{zinc.600}',
+      },
+    },
   },
 })

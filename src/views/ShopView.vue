@@ -22,21 +22,13 @@ const setPokemons = (pokemonsData: Pokemon[]) => {
 </script>
 
 <template>
-  <div class="my-8 flex justify-end gap-x-4">
-    <Button
-      v-if="!currentUserIsCheating"
-      class="cursor-pointer bg-red-500 px-3 py-5"
-      @click="openDialogWithPokemon(handleRandomPokemonPurchase)"
-    >
-      $250 (Random Pokemon)
-    </Button>
-    <Button
-      v-if="!currentUserIsCheating"
-      class="cursor-pointer bg-red-500 px-3 py-5"
-      @click="handleUnlockAll"
-    >
-      Unlock All
-    </Button>
+  <div class="my-8 flex items-center justify-end gap-x-4">
+    <div v-if="!currentUserIsCheating" class="flex items-center gap-4">
+      <Button @click="openDialogWithPokemon(handleRandomPokemonPurchase)">
+        $250 (Random Pokemon)
+      </Button>
+      <Button @click="handleUnlockAll">Unlock All</Button>
+    </div>
   </div>
 
   <PokemonInfiniteScroll @set-pokemons="setPokemons">
