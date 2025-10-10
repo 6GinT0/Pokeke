@@ -8,6 +8,7 @@ import { Dialog } from 'primevue'
 const props = defineProps<{
   pokemon: Pokemon
   routeInPokedex?: boolean
+  pokemonInPokedex?: boolean
 }>()
 
 const visible = ref(false)
@@ -18,11 +19,16 @@ const { pokemon } = toRefs(props)
   <div
     class="card flex flex-col items-center overflow-hidden rounded-xl border-3 border-zinc-700 bg-zinc-800"
   >
-    <div class="flex h-[192px] w-full items-center justify-center bg-rose-500">
+    <slot name="header" />
+    <div
+      class="flex h-[192px] w-full items-center justify-center"
+      :class="[pokemonInPokedex ? 'bg-gray-300' : 'bg-rose-500']"
+    >
       <img
         :src="pokemon.sprites.other['official-artwork'].front_default"
         :alt="pokemon.name"
         class="h-full w-full object-contain"
+        :class="{ 'grayscale-100': pokemonInPokedex }"
       />
     </div>
     <div class="card__avatar bg-zinc-800">

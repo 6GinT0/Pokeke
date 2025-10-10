@@ -26,10 +26,6 @@ const items = ref([
     route: '/shop',
   },
 ])
-
-
-
-
 </script>
 
 <template>
@@ -53,9 +49,10 @@ const items = ref([
           </template>
         </Menubar>
 
-        <div v-if="currentUser">
-          My bag: ${{ userData?.coins }}
-        </div>
+        <div v-if="currentUser">My bag: ${{ userData?.coins }}</div>
+        <RouterLink to="/cart">
+          <Button type="button" icon="pi pi-shopping-cart" variant="outlined" />
+        </RouterLink>
         <Button v-if="currentUser" @click="handleLogout">Logout</Button>
         <RouterLink v-else to="/auth/login">
           <Button>Login</Button>

@@ -18,6 +18,24 @@ export const CustomPreset = definePreset(Aura, {
     },
     colorScheme: {
       light: {
+        surface: {
+          0: '{zinc.800}',
+          50: '{zinc.50}',
+          100: '{zinc.100}',
+          200: '{zinc.200}',
+          300: '{zinc.300}',
+          400: '{zinc.400}',
+          500: '{zinc.500}',
+          600: '{zinc.600}',
+          700: '{zinc.700}',
+          800: '{zinc.800}',
+          900: '{zinc.900}',
+          950: '{zinc.950}',
+          ground: '{zinc.900}',
+          section: '{zinc.800}',
+          card: '{zinc.800}',
+          overlay: '{zinc.700}',
+        },
         formField: {
           background: '{zinc.700}',
           borderColor: '{zinc.600}',
@@ -30,7 +48,6 @@ export const CustomPreset = definePreset(Aura, {
   components: {
     card: {
       root: {
-        background: '{zinc.800}',
         color: '#fafafa',
       },
       subtitle: {
@@ -47,22 +64,6 @@ export const CustomPreset = definePreset(Aura, {
               hoverBackground: '{zinc.600}',
               color: 'white',
             },
-          },
-        },
-      },
-    },
-    menu: {
-      root: {
-        background: '{zinc.800}',
-        borderColor: '{zinc.600}',
-        color: '#fafafa',
-      },
-      colorScheme: {
-        light: {
-          item: {
-            color: '#fafafa',
-            focusColor: '#fafafa',
-            focusBackground: '{zinc.700}',
           },
         },
       },

@@ -11,7 +11,7 @@ import {
   deleteDoc,
 } from 'firebase/firestore'
 import { db } from '@/config/firebase'
-import type { PokedexRaw, PurchasePokemon } from '@/types/pokemon'
+import type { PokedexRaw, PurchasePokemon, Pokemon } from '@/types/pokemon'
 
 export default class PokemonService {
   private PRICE = 250
@@ -151,6 +151,57 @@ export default class PokemonService {
       )
 
       await Promise.all(deletePokemonsPromises)
+    }
+  }
+
+  public async purchasePokemons(
+    userUid: string,
+    pokemons: Pokemon[],
+  ): Promise<{
+    success: boolean
+    error?: string
+  }> {
+    const q = query(collection(db, 'users'), where('uid', '==', userUid))
+
+    const querySnapshot = await getDocs(q)
+
+    if (querySnapshot.empty) {
+      return {
+        success: false,
+        error: 'User not found',
+      }
+    }
+
+    const querySnapshotDoc = querySnapshot.docs[0]
+
+    const querySnapshotData = querySnapshotDoc?.data()
+
+    if (querySnapshotData!.coins < this.PRICE * pokemons.length) {
+      return {
+        success: false,
+        error: 'Not enough coins',
+      }
+    }
+
+    const decrement = querySnapshotData!.coins - this.PRICE * pokemons.length
+
+    await setDoc(doc(db, 'users', querySnapshotDoc!.id), {
+      ...querySnapshotData,
+      coins: decrement,
+    })
+
+    const pokemonPromises = pokemons.map((pokemon) => {
+      return setDoc(doc(collection(db, 'users', querySnapshotDoc!.id, 'rawPokedex')), {
+        name: pokemon.name,
+        url: 'https://pokeapi.co/api/v2/pokemon/' + pokemon.id,
+        caughtAt: new Date(),
+      })
+    })
+
+    await Promise.all([...pokemonPromises])
+
+    return {
+      success: true,
     }
   }
 }

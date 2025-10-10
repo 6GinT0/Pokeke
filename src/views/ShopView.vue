@@ -4,6 +4,7 @@ import { useAsyncState, useElementVisibility } from '@vueuse/core'
 import { usePokemon } from '@/composables/pokemon'
 import { useDialog } from '@/composables/dialog'
 import { useUser } from '@/composables/user'
+import { useCart } from '@/stores/cart'
 import type { Pokemon, PokedexRaw } from '@/types/pokemon'
 import { Button } from 'primevue'
 import PokemonCard from '@/components/pokemon/PokemonCard.vue'
@@ -13,8 +14,9 @@ const page = ref(1)
 const target = useTemplateRef<HTMLDivElement>('target')
 const pokemons = ref<Pokemon[]>([])
 const { dialogVisible, pokemonToShow, closeDialog, openDialogWithPokemon } = useDialog()
-const { userData } = useUser()
+const { userData, pokemonInPokedex } = useUser()
 const { handleRandomPokemonPurchase, handleUnlockAll } = usePokemon()
+const { addPokemon, removePokemon, pokemonInCart } = useCart()
 const { isLoading, execute } = useAsyncState(
   async () => {
     const limit = 20
@@ -80,7 +82,33 @@ watch(targetIsVisible, () => {
     </Button>
   </div>
   <div class="my-12 grid gap-6 md:grid-cols-3 xl:grid-cols-4">
-    <PokemonCard v-for="pokemon in pokemons" :key="pokemon.id" :pokemon />
+    <PokemonCard
+      v-for="pokemon in pokemons"
+      :key="pokemon.id"
+      :pokemon
+      :pokemon-in-pokedex="pokemonInPokedex(pokemon)"
+    >
+      <template v-if="!pokemonInPokedex(pokemon)" #header>
+        <div class="absolute top-2 right-2">
+          <Button
+            v-if="!pokemonInCart(pokemon)"
+            icon="pi pi-shopping-cart"
+            size="small"
+            rounded
+            @click="addPokemon(pokemon)"
+          />
+
+          <Button
+            v-if="pokemonInCart(pokemon)"
+            icon="pi pi-times"
+            size="small"
+            severity="danger"
+            rounded
+            @click="removePokemon(pokemon)"
+          />
+        </div>
+      </template>
+    </PokemonCard>
   </div>
 
   <div v-if="!isLoading" class="sr-only h-10" ref="target" />
