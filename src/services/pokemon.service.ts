@@ -204,4 +204,30 @@ export default class PokemonService {
       success: true,
     }
   }
+
+  public async guessThePokemonMinigame(userUid: string) {
+    const q = query(collection(db, 'users'), where('uid', '==', userUid))
+
+    const querySnapshot = await getDocs(q)
+
+    if (querySnapshot.empty) {
+      return {
+        success: false,
+        error: 'User not found',
+      }
+    }
+
+    const querySnapshotDoc = querySnapshot.docs[0]
+
+    const querySnapshotData = querySnapshotDoc?.data()
+
+    await setDoc(
+      doc(db, 'users', querySnapshotDoc!.id),
+      {
+        ...querySnapshotData,
+        coins: increment(100),
+      },
+      { merge: true },
+    )
+  }
 }

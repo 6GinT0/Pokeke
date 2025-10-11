@@ -157,11 +157,25 @@ export const usePokemon = () => {
     return router.push({ name: 'pokedex' })
   }
 
+  async function handleGuessThePokemonMinigame() {
+    if (userData.value) {
+      await pokemonService.guessThePokemonMinigame(userData.value.uid)
+
+      toast.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'You guessed the Pokemon!',
+        life: 3000,
+      })
+    }
+  }
+
   return {
     pokedex,
     getPokedex,
     handleRandomPokemonPurchase,
     handleUnlockAll,
     handlePurchasePokemons,
+    handleGuessThePokemonMinigame,
   }
 }

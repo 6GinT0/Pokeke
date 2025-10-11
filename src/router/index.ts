@@ -16,6 +16,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/minigame',
+      name: 'minigame',
+      component: () => import('@/views/MinigameView.vue'),
+      meta: {
+        title: 'Minigame',
+      },
+    },
+    {
       path: '/pokedex',
       name: 'pokedex',
       component: () => import('@/views/PokedexView.vue'),

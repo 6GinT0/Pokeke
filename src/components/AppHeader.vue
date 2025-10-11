@@ -17,6 +17,11 @@ const items = ref([
     route: '/',
   },
   {
+    label: 'Minigame',
+    icon: 'pi pi-mobile',
+    route: '/minigame',
+  },
+  {
     label: 'Pokedex',
     icon: 'pi pi-search',
     route: '/pokedex',
@@ -25,6 +30,14 @@ const items = ref([
     label: 'Shop',
     icon: 'pi pi-shopping-bag',
     route: '/shop',
+  },
+])
+const itemsMobile = ref([
+  ...items.value,
+  {
+    label: 'My bag',
+    icon: 'pi pi-shopping-cart',
+    route: '/cart',
   },
 ])
 </script>
@@ -41,7 +54,7 @@ const items = ref([
           <div class="flex flex-col space-y-4">
             <RouterLink
               class="hover:bg-zinc-700"
-              v-for="item in items"
+              v-for="item in itemsMobile"
               :key="item.label"
               :to="item.route"
             >
@@ -49,10 +62,19 @@ const items = ref([
               {{ item.label }}
             </RouterLink>
           </div>
+          <template #footer>
+            <div class="flex flex-col gap-4">
+              <div v-if="currentUser">My bag: ${{ userData?.coins }}</div>
+              <Button v-if="currentUser" @click="handleLogout">Logout</Button>
+              <RouterLink v-else to="/auth/login">
+                <Button>Login</Button>
+              </RouterLink>
+            </div>
+          </template>
         </Drawer>
         <Button icon="pi pi-bars" variant="outlined" @click="visible = true" />
       </div>
-      <div class="hidden items-center gap-6 lg:flex">
+      <div class="hidden items-center gap-3 lg:flex">
         <Menubar :model="items" breakpoint="320px">
           <template #item="{ item, props, hasSubmenu }">
             <RouterLink v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
