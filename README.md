@@ -1,48 +1,106 @@
-# .
+# Pokémon Battle & Collect App
 
-This template should help get you started developing with Vue 3 in Vite.
+**Pokémon Battle & Collect App** is a **Pokémon-style web game** built with **Vue (Vite)**. It allows users to **collect, purchase, and unlock Pokémon** through a **virtual currency system**, battle CPU, and play a **Pokémon guessing mini-game**.
 
-## Recommended IDE Setup
+The project features **Firebase authentication**, a customizable UI with **Primevue**, and internationalization support.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+---
 
-## Recommended Browser Setup
+## 🚀 Features
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+### Core Gameplay & Inventory
 
-## Type Support for `.vue` Imports in TS
+- 🎁 **Initial unlock**: 3 random Pokémon given to new users.
+- 📦 **Pokémon inventory**: Display collected Pokémon with stats.
+- 💰 **Virtual currency system**: Coins for purchasing Pokémon or packs.
+- ⚡ **Special button**: Unlock all content with infinite coins (premium/cheat mode).
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### Battle System
 
-## Customize configuration
+- 🥊 **CPU battles**: Team selection from inventory to fight CPU.
+- 🎯 **Simplified combat mechanics**: Turn-based attack/defense system.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### Mini-game
 
-## Project Setup
+- ❓ **Guess the Pokémon**: Show silhouette and let users guess the Pokémon.
+- 🏆 **Reward system**: Points or coins for correct guesses.
 
-```sh
+### Authentication & User Profile
+
+- 🔑 **Firebase Authentication**: Email and Google sign-in.
+- 👤 **User profile**: Stores inventory, coins, and progress in Firebase.
+
+---
+
+## 📂 Technologies Used
+
+- [Vue](https://vuejs.org/) - Frontend framework
+- [Vite](https://vitejs.dev/) - Development tooling
+- [PrimeVue](https://primevue.org/) - UI styling + TailwindCSS
+- [Firebase](https://firebase.google.com/) - Authentication & database
+
+---
+
+## 📦 Installation & Usage
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/6GinT0/Pokeke.git
+```
+
+### 2. Navigate to the project directory
+
+```bash
+cd Pokeke
+```
+
+### 3. Install dependencies
+
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 4. Firebase Setup
 
-```sh
+1. Go to [Firebase Console](https://console.firebase.google.com/) and create a new project.
+2. Enable **Authentication** (Email/Password and Google Sign-In).
+3. Create a **Firestore Database** and set rules according to your needs.
+4. Copy your Firebase config and paste it into `.env.local` (see `.env.dist` as reference).
+
+### 6. Start the development server
+
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### 7. Open in your browser
 
-```sh
-npm run build
-```
+[http://localhost:5173](http://localhost:5173)
 
-### Lint with [ESLint](https://eslint.org/)
+---
 
-```sh
-npm run lint
-```
+## 📸 Preview
+
+![Screenshot](https://via.placeholder.com/800x400.png?text=Pok%C3%A9mon+Battle+%26+Collect+App+Screenshot)
+
+---
+
+## 🤝 Contribution
+
+If you want to contribute to **Pokémon Battle & Collect App**, please:
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/new-feature`)
+3. Make your changes and commit (`git commit -m 'Add new feature'`)
+4. Submit a pull request
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. You are free to use, modify, and distribute it.
+
+---
+
+Developed with ❤️ by Ulises
