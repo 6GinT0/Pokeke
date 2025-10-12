@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-The goal of this project is to develop a web-based Pokémon-style game that allows users to **collect, purchase, and unlock Pokémon** using a virtual in-game currency. Players can engage in **AI battles** or participate in a **Pokémon guessing mini-game**, earning rewards as they play.
+The goal of this project is to develop a web-based Pokémon-style game that allows users to **collect, purchase, and unlock Pokémon** using a virtual in-game currency. Players can participate in a **Pokémon guessing mini-game**, earning rewards as they play.
 
 Upon registration, each new user will automatically unlock **three random Pokémon for free**, providing an initial collection to start the experience.
 
@@ -44,15 +44,7 @@ Web Game Development, Gamification, User Interaction
 
 ---
 
-### Milestone 2: AI Battle System
-
-- **Team selection**: Choose Pokémon from the user’s inventory for battle.
-- **Simplified combat system**: Turn-based AI fights where outcomes depend on Pokémon stats.
-- **Reward system**: Victories yield coins or experience points.
-
----
-
-### Milestone 3: Mini-Game – Guess the Pokémon
+### Milestone 2: Mini-Game – Guess the Pokémon
 
 - Display a **Pokémon silhouette**, and the player guesses its name.
 - Rewards for correct guesses (coins or extra Pokémon).
@@ -60,7 +52,7 @@ Web Game Development, Gamification, User Interaction
 
 ---
 
-### Milestone 4: Authentication & Profile Management
+### Milestone 3: Authentication & Profile Management
 
 - Integrate **Firebase Authentication** (email and Google sign-in).
 - Store user data (Pokémon, coins, achievements) in **Firebase Firestore**.

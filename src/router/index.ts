@@ -33,15 +33,6 @@ const router = createRouter({
       },
     },
     {
-      path: '/battle',
-      name: 'battle',
-      component: () => import('@/views/BattleView.vue'),
-      meta: {
-        title: 'Battle',
-        requiresAuth: true,
-      },
-    },
-    {
       path: '/cart',
       name: 'cart',
       component: () => import('@/views/CartView.vue'),

@@ -1,6 +1,6 @@
 # Pokémon Battle & Collect App
 
-**Pokémon Battle & Collect App** is a **Pokémon-style web game** built with **Vue (Vite)**. It allows users to **collect, purchase, and unlock Pokémon** through a **virtual currency system**, battle CPU, and play a **Pokémon guessing mini-game**.
+**Pokémon Battle & Collect App** is a **Pokémon-style web game** built with **Vue (Vite)**. It allows users to **collect, purchase, and unlock Pokémon** through a **virtual currency system**, and play a **Pokémon guessing mini-game**.
 
 The project features **Firebase authentication**, a customizable UI with **Primevue**, and internationalization support.
 
@@ -14,11 +14,6 @@ The project features **Firebase authentication**, a customizable UI with **Prime
 - 📦 **Pokémon inventory**: Display collected Pokémon with stats.
 - 💰 **Virtual currency system**: Coins for purchasing Pokémon or packs.
 - ⚡ **Special button**: Unlock all content with infinite coins (premium/cheat mode).
-
-### Battle System
-
-- 🥊 **CPU battles**: Team selection from inventory to fight CPU.
-- 🎯 **Simplified combat mechanics**: Turn-based attack/defense system.
 
 ### Mini-game
 

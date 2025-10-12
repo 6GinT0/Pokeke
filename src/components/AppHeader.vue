@@ -13,22 +13,18 @@ const visible = ref(false)
 const items = ref([
   {
     label: 'Home',
-    icon: 'pi pi-home',
     route: '/',
   },
   {
     label: 'Minigame',
-    icon: 'pi pi-mobile',
     route: '/minigame',
   },
   {
     label: 'Pokedex',
-    icon: 'pi pi-search',
     route: '/pokedex',
   },
   {
     label: 'Shop',
-    icon: 'pi pi-shopping-bag',
     route: '/shop',
   },
 ])
@@ -36,7 +32,6 @@ const itemsMobile = ref([
   ...items.value,
   {
     label: 'My bag',
-    icon: 'pi pi-shopping-cart',
     route: '/cart',
   },
 ])
@@ -58,7 +53,6 @@ const itemsMobile = ref([
               :key="item.label"
               :to="item.route"
             >
-              <span class="mr-2" :class="item.icon" />
               {{ item.label }}
             </RouterLink>
           </div>
@@ -76,18 +70,12 @@ const itemsMobile = ref([
       </div>
       <div class="hidden items-center gap-3 lg:flex">
         <Menubar :model="items" breakpoint="320px">
-          <template #item="{ item, props, hasSubmenu }">
-            <RouterLink v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
+          <template #item="{ item, props }">
+            <RouterLink v-if="item.route" v-slot="{ href, navigate }" :to="item.route">
               <a :href="href" v-bind="props.action" @click="navigate">
-                <span :class="item.icon" />
                 <span>{{ item.label }}</span>
               </a>
             </RouterLink>
-            <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-              <span :class="item.icon" />
-              <span>{{ item.label }}</span>
-              <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down" />
-            </a>
           </template>
         </Menubar>
 

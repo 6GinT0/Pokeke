@@ -6,7 +6,7 @@ const user = useCurrentUser()
 </script>
 
 <template>
-  <main>
+  <main class="my-12 p-4">
     <Button>Hola</Button>
     <p v-if="user">Hello {{ user.providerData[0]?.displayName }}</p>
   </main>
