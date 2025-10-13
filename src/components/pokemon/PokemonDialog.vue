@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue'
 import { Dialog } from 'primevue'
 import { formattedString } from '@/utils/pokemonName'
-import PokemonCard from './PokemonCard.vue'
+import PokemonCard from '../../features/pokedex/components/pokeball/PokemonCard.vue'
 import type { PokedexRaw, Pokemon } from '@/types/pokemon'
 
 const props = defineProps<{

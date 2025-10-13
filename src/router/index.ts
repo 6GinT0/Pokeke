@@ -18,7 +18,7 @@ const router = createRouter({
     {
       path: '/minigame',
       name: 'minigame',
-      component: () => import('@/views/MinigameView.vue'),
+      component: () => import('@features/minigame/views/MinigameView.vue'),
       meta: {
         title: 'Minigame',
       },
@@ -26,7 +26,7 @@ const router = createRouter({
     {
       path: '/pokedex',
       name: 'pokedex',
-      component: () => import('@/views/PokedexView.vue'),
+      component: () => import('@features/pokedex/views/PokedexView.vue'),
       meta: {
         title: 'Pokedex',
         requiresAuth: true,
@@ -35,7 +35,7 @@ const router = createRouter({
     {
       path: '/cart',
       name: 'cart',
-      component: () => import('@/views/CartView.vue'),
+      component: () => import('@features/shop/views/CartView.vue'),
       meta: {
         title: 'Cart',
       },
@@ -43,7 +43,7 @@ const router = createRouter({
     {
       path: '/shop',
       name: 'shop',
-      component: () => import('@/views/ShopView.vue'),
+      component: () => import('@features/shop/views/ShopView.vue'),
       meta: {
         title: 'Shopping',
       },
@@ -55,7 +55,7 @@ const router = createRouter({
         {
           path: 'login',
           name: 'login',
-          component: () => import('@/views/auth/LoginView.vue'),
+          component: () => import('@features/auth/views/LoginView.vue'),
           meta: {
             title: 'Login',
           },
@@ -63,7 +63,7 @@ const router = createRouter({
         {
           path: 'signup',
           name: 'signup',
-          component: () => import('@/views/auth/SignUpView.vue'),
+          component: () => import('@features/auth/views/RegisterView.vue'),
           meta: {
             title: 'Sign Up',
           },

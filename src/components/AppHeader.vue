@@ -2,13 +2,11 @@
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useUser } from '@/composables/user'
-import { useAuth } from '@/composables/auth'
-import { useCurrentUser } from 'vuefire'
+import { useAuth } from '@/features/auth/composables/auth'
 import { Button, Menubar, Drawer } from 'primevue'
 
-const { userData } = useUser()
+const { user, userRealtimeData } = useUser()
 const { handleLogout } = useAuth()
-const currentUser = useCurrentUser()
 const visible = ref(false)
 const items = ref([
   {
@@ -58,8 +56,8 @@ const itemsMobile = ref([
           </div>
           <template #footer>
             <div class="flex flex-col gap-4">
-              <div v-if="currentUser">My bag: ${{ userData?.coins }}</div>
-              <Button v-if="currentUser" @click="handleLogout">Logout</Button>
+              <div v-if="user">My bag: ${{ userRealtimeData?.coins }}</div>
+              <Button v-if="user" @click="handleLogout">Logout</Button>
               <RouterLink v-else to="/auth/login">
                 <Button>Login</Button>
               </RouterLink>
@@ -79,11 +77,11 @@ const itemsMobile = ref([
           </template>
         </Menubar>
 
-        <div v-if="currentUser">My bag: ${{ userData?.coins }}</div>
+        <div v-if="user">My bag: ${{ userRealtimeData?.coins }}</div>
         <RouterLink to="/cart">
           <Button type="button" icon="pi pi-shopping-cart" variant="outlined" />
         </RouterLink>
-        <Button v-if="currentUser" @click="handleLogout">Logout</Button>
+        <Button v-if="user" @click="handleLogout">Logout</Button>
         <RouterLink v-else to="/auth/login">
           <Button>Login</Button>
         </RouterLink>

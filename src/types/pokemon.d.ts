@@ -402,8 +402,19 @@ export interface PokedexRaw {
   url: string
 }
 
-export interface PurchasePokemon {
+export interface PokemonRaw {
+  name: string
+  url: string
+}
+
+export interface PokemonPurchase {
   success: boolean
   error?: string
-  data?: PokedexRaw
+  data?: PokemonRaw
+}
+
+export interface PokemonFetch {
+  success: boolean
+  error?: string
+  data?: Pokemon[]
 }
