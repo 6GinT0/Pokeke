@@ -2,7 +2,6 @@ import { collection, doc, addDoc, getDocs } from 'firebase/firestore'
 import { db } from '@/config/firebase'
 import FirebaseAuthService from '@/features/auth/services/FirebaseAuthService'
 import PokeAPI from './PokeAPI'
-import { getRandomInt } from '@/utils/randomInt'
 import type { PokedexResponse } from '../types/response'
 import type { Pokedex } from '../types/pokedex'
 
@@ -39,20 +38,19 @@ export default class PokemonService {
       return
     }
 
-    const pokemonCount = await this.pokeAPI.getPokemonsCount()
-    const uniqueIds = new Set<number>()
+    const uniquePokemons: any[] = []
 
-    while (uniqueIds.size < 3) {
-      const randomId = getRandomInt(1, pokemonCount)
+    while (uniquePokemons.length < 3) {
+      const randomPokemon = await this.pokeAPI.getPokemonByRandomId()
+      if (!randomPokemon) continue
 
-      uniqueIds.add(randomId)
+      // Verifica por ID si ya está en el array
+      if (!uniquePokemons.find((p) => p.id === randomPokemon.id)) {
+        uniquePokemons.push(randomPokemon)
+      }
     }
 
-    const pokemons = await Promise.all(
-      Array.from(uniqueIds).map((id) => this.pokeAPI.getPokemonById(id)),
-    )
-
-    const pokemonPromises = pokemons.map(({ images, ...pokemon }) => {
+    const pokemonPromises = uniquePokemons.map(({ images, ...pokemon }) => {
       const image = images?.[0]?.sprites?.other?.['official-artwork']?.front_default ?? ''
 
       return addDoc(pokedexRef, {
