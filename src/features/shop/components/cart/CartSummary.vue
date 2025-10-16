@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useCart } from '@features/shop/stores/cart'
-import { usePokemon } from '@/features/pokedex/composables/pokemon'
+import { useShopActions } from '@features/shop/composables/shopActions'
 import { storeToRefs } from 'pinia'
 import { Button } from 'primevue'
 
 const cartStore = useCart()
 const { cartLength, total } = storeToRefs(cartStore)
-const { handlePurchasePokemons } = usePokemon()
+const { handlePurchasePokemons } = useShopActions()
 </script>
 
 <template>

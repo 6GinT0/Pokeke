@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, toRefs } from 'vue'
 import { usePokemon } from '@features/pokedex/composables/pokemon'
-import type { Pokemon } from '@/types/pokemon'
 import PokeballBall from './PokeballBall.vue'
 import { Dialog } from 'primevue'
+import type { PokemonParsedData } from '@/types/pokemon'
 
 const props = defineProps<{
-  pokemon: Pokemon
+  pokemon: PokemonParsedData | any
   routeInPokedex?: boolean
   pokemonInPokedex?: boolean
 }>()
@@ -26,7 +26,7 @@ const { formattedName } = usePokemon()
       :class="[pokemonInPokedex ? 'bg-gray-300' : 'bg-rose-500']"
     >
       <img
-        :src="pokemon.sprites.other['official-artwork'].front_default"
+        :src="pokemon.image"
         :alt="pokemon.name"
         class="h-full w-full object-contain"
         :class="{ 'grayscale-100': pokemonInPokedex }"
@@ -49,11 +49,7 @@ const { formattedName } = usePokemon()
       class="card__dialog flex flex-col items-center overflow-hidden rounded-xl border-3 border-zinc-700 bg-zinc-800"
     >
       <div class="flex h-[192px] w-full items-center justify-center bg-rose-500">
-        <img
-          :src="pokemon.sprites.other['official-artwork'].front_default"
-          :alt="pokemon.name"
-          class="h-full w-full object-contain"
-        />
+        <img :src="pokemon.image" :alt="pokemon.name" class="h-full w-full object-contain" />
       </div>
       <div class="my-4 flex w-full flex-col justify-start px-4 py-2">
         <div v-for="(stat, idx) in pokemon.stats" class="flex gap-x-2" :key="idx">

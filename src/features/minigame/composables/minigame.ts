@@ -1,50 +1,38 @@
 import { ref, computed } from 'vue'
+import type { Ref } from 'vue'
 import { useUser } from '@/composables/user'
-import { useFetch } from '@vueuse/core'
+import { useServices } from '@/composables/services'
 import { useToast } from 'primevue'
 import { usePokemon } from '@/features/pokedex/composables/pokemon'
-import PokemonService from '@/features/pokedex/services/PokemonService'
-import MinigameService from '@/features/minigame/services/MinigameService'
-import type { Pokemon } from '@/types/pokemon'
 
 export const useMinigame = () => {
-  const pokemonService = PokemonService.getInstance()
-  const minigameService = MinigameService.getInstance()
   const { user } = useUser()
+  const { minigameService, pokeAPI } = useServices()
+  const loading = ref(false)
   const toast = useToast()
   const { formattedName } = usePokemon()
-  const currentPokemonUrl = ref('')
+  const currentPokemon: Ref<any> = ref(null)
   const userGuess = ref('')
   const feedback = ref('')
   const gameFinished = ref(false)
 
-  const {
-    isFetching,
-    data: pokemonData,
-    execute: fetchPokemon,
-  } = useFetch<Pokemon>(currentPokemonUrl, {
-    refetch: true,
-    immediate: false,
-  }).json()
-
   const hiddenImageClass = computed(() => (gameFinished.value ? '' : 'brightness-0'))
-  const pokemonName = computed(() => pokemonData.value?.name?.replace(/-/g, ' ') ?? '')
+  const pokemonName = computed(() => currentPokemon.value?.name?.replace(/-/g, ' ') ?? '')
 
   async function initGame() {
-    const randPokemon = await pokemonService.getRandomPokemon()
-    currentPokemonUrl.value = randPokemon.url
+    loading.value = true
+    currentPokemon.value = await pokeAPI.getPokemonByRandomId()
 
     gameFinished.value = false
     feedback.value = ''
     userGuess.value = ''
 
-    await fetchPokemon()
-
-    console.log(randPokemon.name)
+    console.log(currentPokemon.value.name)
+    loading.value = false
   }
 
   async function checkGuess() {
-    if (!pokemonData.value) return
+    if (!currentPokemon.value) return
     const normalizedGuess = userGuess.value.trim().toLowerCase()
     const normalizedName = pokemonName.value.toLowerCase()
 
@@ -73,12 +61,12 @@ export const useMinigame = () => {
   }
 
   return {
+    currentPokemon,
+    loading,
     gameFinished,
     feedback,
     userGuess,
-    pokemonData,
     hiddenImageClass,
-    isFetching,
     checkGuess,
     initGame,
   }

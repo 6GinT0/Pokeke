@@ -1,17 +1,21 @@
 <script setup lang="ts">
+import { useTemplateRef } from 'vue'
 import { useUser } from '@/composables/user'
 import { useCart } from '@features/shop/stores/cart'
-import { usePokemon } from '@/features/pokedex/composables/pokemon'
+import { useShopActions } from '@features/shop/composables/shopActions'
 import { useInfiniteScroll } from '@features/shop/composables/infiniteScroll'
+import { usePokemonQuery } from '@/features/pokedex/composables/pokemonQuery'
 import { useDialog } from '@/composables/dialog'
 import { Button } from 'primevue'
 import PokemonCard from '@/features/pokedex/components/pokeball/PokemonCard.vue'
 import PokemonDialog from '@/components/pokemon/PokemonDialog.vue'
 
 const { pokemonInPokedex } = useUser()
-const { pokemons, target, isLoading } = useInfiniteScroll()
+const target = useTemplateRef<HTMLDivElement>('target')
+const { page } = useInfiniteScroll(target)
+const { pokemons, loading } = usePokemonQuery(page)
 const { dialogVisible, pokemonToShow, closeDialog, openDialogWithPokemon } = useDialog()
-const { handleRandomPokemonPurchase } = usePokemon()
+const { handleRandomPokemonPurchase } = useShopActions()
 const { addPokemon, removePokemon, pokemonInCart } = useCart()
 </script>
 
@@ -54,7 +58,7 @@ const { addPokemon, removePokemon, pokemonInCart } = useCart()
     </PokemonCard>
   </div>
 
-  <div v-if="!isLoading" class="sr-only h-10" ref="target" />
+  <div v-if="!loading" class="sr-only h-10" ref="target" />
 
   <PokemonDialog v-model:visible="dialogVisible" :pokemon="pokemonToShow" @close="closeDialog" />
 </template>

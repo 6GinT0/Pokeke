@@ -16,3 +16,8 @@ export interface UserData {
   coins: number
   cheat: boolean
 }
+
+export interface UserError {
+  success: false
+  error: string
+}

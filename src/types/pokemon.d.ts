@@ -1,307 +1,102 @@
+export interface Root {
+  data: Data
+}
+
+export interface Data {
+  pokemon: Pokemon[]
+}
+
 export interface Pokemon {
-  abilities: Ability[]
-  base_experience: number
-  cries: Cries
-  forms: Form[]
-  game_indices: Index[]
-  height: number
-  held_items: HeldItem[]
+  name: string
   id: number
-  is_default: boolean
-  location_area_encounters: string
-  moves: Mfe[]
-  name: string
-  order: number
-  past_abilities: PastAbility[]
-  past_types: PastType[]
-  species: Species
-  sprites: Sprites
+  images: Image[]
   stats: Stat[]
-  types: Type[]
-  weight: number
 }
 
-export interface Ability {
-  ability: Ability2
-  is_hidden: boolean
-  slot: number
-}
-
-export interface Ability2 {
-  name: string
-  url: string
-}
-
-export interface Cries {
-  latest: string
-  legacy: string
-}
-
-export interface Form {
-  name: string
-  url: string
-}
-
-export interface Index {
-  game_index: number
-  version: Version
-}
-
-export interface Version {
-  name: string
-  url: string
-}
-
-export interface HeldItem {
-  item: Item
-  version_details: VersionDetail[]
-}
-
-export interface Item {
-  name: string
-  url: string
-}
-
-export interface VersionDetail {
-  rarity: number
-  version: Version2
-}
-
-export interface Version2 {
-  name: string
-  url: string
-}
-
-export interface Mfe {
-  move: Move
-  version_group_details: VersionGroupDetail[]
-}
-
-export interface Move {
-  name: string
-  url: string
-}
-
-export interface VersionGroupDetail {
-  level_learned_at: number
-  move_learn_method: MoveLearnMethod
-  order: number
-  version_group: VersionGroup
-}
-
-export interface MoveLearnMethod {
-  name: string
-  url: string
-}
-
-export interface VersionGroup {
-  name: string
-  url: string
-}
-
-export interface PastAbility {
-  abilities: Ability3[]
-  generation: Generation
-}
-
-export interface Ability3 {
-  ability: Ability2
-  is_hidden: boolean
-  slot: number
-}
-
-export interface Generation {
-  name: string
-  url: string
-}
-
-export interface PastType {
-  generation: Generation
-  types: Type[]
-}
-
-export interface Species {
-  name: string
-  url: string
+export interface Image {
+  sprites: Sprites
 }
 
 export interface Sprites {
-  back_default: string
-  back_female: string | null
-  back_shiny: string
-  back_shiny_female: string | null
-  front_default: string
-  front_female: string | null
-  front_shiny: string
-  front_shiny_female: string | null
   other: Other
   versions: Versions
+  back_shiny: string
+  back_female: string | null
+  front_shiny: string
+  back_default: string
+  front_female: string | null
+  front_default: string
+  back_shiny_female: string | null
+  front_shiny_female: string | null
 }
 
 export interface Other {
-  dream_world: DreamWorld
   home: Home
-  'official-artwork': OfficialArtwork
   showdown: Showdown
-}
-
-export interface DreamWorld {
-  front_default: string
-  front_female: string | null
+  dream_world: DreamWorld
+  'official-artwork': OfficialArtwork
 }
 
 export interface Home {
-  front_default: string
+  front_shiny: string
   front_female: string | null
-  front_shiny: string
-  front_shiny_female: string | null
-}
-
-export interface OfficialArtwork {
   front_default: string
-  front_shiny: string
+  front_shiny_female: string | null
 }
 
 export interface Showdown {
-  back_default: string
-  back_female: string | null
   back_shiny: string
-  back_shiny_female: string | null
-  front_default: string
-  front_female: string | null
+  back_female: string | null
   front_shiny: string
+  back_default: string
+  front_female: string | null
+  front_default: string
+  back_shiny_female: string | null
   front_shiny_female: string | null
+}
+
+export interface DreamWorld {
+  front_female: string | null
+  front_default: string
+}
+
+export interface OfficialArtwork {
+  front_shiny: string
+  front_default: string
 }
 
 export interface Versions {
   'generation-i': GenerationI
-  'generation-ii': GenerationIi
-  'generation-iii': GenerationIii
-  'generation-iv': GenerationIv
   'generation-v': GenerationV
+  'generation-ii': GenerationIi
+  'generation-iv': GenerationIv
   'generation-vi': GenerationVi
+  'generation-iii': GenerationIii
   'generation-vii': GenerationVii
   'generation-viii': GenerationViii
 }
 
 export interface GenerationI {
-  'red-blue': RedBlue
   yellow: Yellow
-}
-
-export interface RedBlue {
-  back_default: string
-  back_gray: string
-  back_transparent: string
-  front_default: string
-  front_gray: string
-  front_transparent: string
+  'red-blue': RedBlue
 }
 
 export interface Yellow {
-  back_default: string
   back_gray: string
-  back_transparent: string
-  front_default: string
   front_gray: string
-  front_transparent: string
-}
-
-export interface GenerationIi {
-  crystal: Crystal
-  gold: Gold
-  silver: Silver
-}
-
-export interface Crystal {
   back_default: string
-  back_shiny: string
-  back_shiny_transparent: string
+  front_default: string
   back_transparent: string
-  front_default: string
-  front_shiny: string
-  front_shiny_transparent: string
   front_transparent: string
 }
 
-export interface Gold {
+export interface RedBlue {
+  back_gray: string
+  front_gray: string
   back_default: string
-  back_shiny: string
   front_default: string
-  front_shiny: string
+  back_transparent: string
   front_transparent: string
-}
-
-export interface Silver {
-  back_default: string
-  back_shiny: string
-  front_default: string
-  front_shiny: string
-  front_transparent: string
-}
-
-export interface GenerationIii {
-  emerald: Emerald
-  'firered-leafgreen': FireredLeafgreen
-  'ruby-sapphire': RubySapphire
-}
-
-export interface Emerald {
-  front_default: string
-  front_shiny: string
-}
-
-export interface FireredLeafgreen {
-  back_default: string
-  back_shiny: string
-  front_default: string
-  front_shiny: string
-}
-
-export interface RubySapphire {
-  back_default: string
-  back_shiny: string
-  front_default: string
-  front_shiny: string
-}
-
-export interface GenerationIv {
-  'diamond-pearl': DiamondPearl
-  'heartgold-soulsilver': HeartgoldSoulsilver
-  platinum: Platinum
-}
-
-export interface DiamondPearl {
-  back_default: string
-  back_female: string | null
-  back_shiny: string
-  back_shiny_female: string | null
-  front_default: string
-  front_female: string | null
-  front_shiny: string
-  front_shiny_female: string | null
-}
-
-export interface HeartgoldSoulsilver {
-  back_default: string
-  back_female: string | null
-  back_shiny: string
-  back_shiny_female: string | null
-  front_default: string
-  front_female: string | null
-  front_shiny: string
-  front_shiny_female: string | null
-}
-
-export interface Platinum {
-  back_default: string
-  back_female: string | null
-  back_shiny: string
-  back_shiny_female: string | null
-  front_default: string
-  front_female: string | null
-  front_shiny: string
-  front_shiny_female: string | null
 }
 
 export interface GenerationV {
@@ -310,44 +105,141 @@ export interface GenerationV {
 
 export interface BlackWhite {
   animated: Animated
-  back_default: string
-  back_female: string | null
   back_shiny: string
-  back_shiny_female: string | null
-  front_default: string
-  front_female: string | null
+  back_female: string | null
   front_shiny: string
+  back_default: string
+  front_female: string | null
+  front_default: string
+  back_shiny_female: string | null
   front_shiny_female: string | null
 }
 
 export interface Animated {
-  back_default: string
-  back_female: string | null
   back_shiny: string
-  back_shiny_female: string | null
-  front_default: string
-  front_female: string | null
+  back_female: string | null
   front_shiny: string
+  back_default: string
+  front_female: string | null
+  front_default: string
+  back_shiny_female: string | null
+  front_shiny_female: string | null
+}
+
+export interface GenerationIi {
+  gold: Gold
+  silver: Silver
+  crystal: Crystal
+}
+
+export interface Gold {
+  back_shiny: string
+  front_shiny: string
+  back_default: string
+  front_default: string
+  front_transparent: string
+}
+
+export interface Silver {
+  back_shiny: string
+  front_shiny: string
+  back_default: string
+  front_default: string
+  front_transparent: string
+}
+
+export interface Crystal {
+  back_shiny: string
+  front_shiny: string
+  back_default: string
+  front_default: string
+  back_transparent: string
+  front_transparent: string
+  back_shiny_transparent: string
+  front_shiny_transparent: string
+}
+
+export interface GenerationIv {
+  platinum: Platinum
+  'diamond-pearl': DiamondPearl
+  'heartgold-soulsilver': HeartgoldSoulsilver
+}
+
+export interface Platinum {
+  back_shiny: string
+  back_female: string | null
+  front_shiny: string
+  back_default: string
+  front_female: string | null
+  front_default: string
+  back_shiny_female: string | null
+  front_shiny_female: string | null
+}
+
+export interface DiamondPearl {
+  back_shiny: string
+  back_female: string | null
+  front_shiny: string
+  back_default: string
+  front_female: string | null
+  front_default: string
+  back_shiny_female: string | null
+  front_shiny_female: string | null
+}
+
+export interface HeartgoldSoulsilver {
+  back_shiny: string
+  back_female: string | null
+  front_shiny: string
+  back_default: string
+  front_female: string | null
+  front_default: string
+  back_shiny_female: string | null
   front_shiny_female: string | null
 }
 
 export interface GenerationVi {
-  'omegaruby-alphasapphire': OmegarubyAlphasapphire
   'x-y': XY
-}
-
-export interface OmegarubyAlphasapphire {
-  front_default: string
-  front_female: string | null
-  front_shiny: string
-  front_shiny_female: string | null
+  'omegaruby-alphasapphire': OmegarubyAlphasapphire
 }
 
 export interface XY {
-  front_default: string
-  front_female: string | null
   front_shiny: string
+  front_female: string | null
+  front_default: string
   front_shiny_female: string | null
+}
+
+export interface OmegarubyAlphasapphire {
+  front_shiny: string
+  front_female: string | null
+  front_default: string
+  front_shiny_female: string | null
+}
+
+export interface GenerationIii {
+  emerald: Emerald
+  'ruby-sapphire': RubySapphire
+  'firered-leafgreen': FireredLeafgreen
+}
+
+export interface Emerald {
+  front_shiny: string
+  front_default: string
+}
+
+export interface RubySapphire {
+  back_shiny: string
+  front_shiny: string
+  back_default: string
+  front_default: string
+}
+
+export interface FireredLeafgreen {
+  back_shiny: string
+  front_shiny: string
+  back_default: string
+  front_default: string
 }
 
 export interface GenerationVii {
@@ -356,14 +248,14 @@ export interface GenerationVii {
 }
 
 export interface Icons {
-  front_default: string
   front_female: string | null
+  front_default: string
 }
 
 export interface UltraSunUltraMoon {
-  front_default: string
-  front_female: string | null
   front_shiny: string
+  front_female: string | null
+  front_default: string
   front_shiny_female: string | null
 }
 
@@ -372,8 +264,8 @@ export interface GenerationViii {
 }
 
 export interface Icons2 {
-  front_default: string
   front_female: string | null
+  front_default: string
 }
 
 export interface Stat {
@@ -384,37 +276,11 @@ export interface Stat {
 
 export interface Stat2 {
   name: string
-  url: string
 }
 
-export interface Type {
-  slot: number
-  type: Type2
-}
-
-export interface Type2 {
+export interface PokemonParsedData {
+  id: number
   name: string
-  url: string
-}
-
-export interface PokedexRaw {
-  name: string
-  url: string
-}
-
-export interface PokemonRaw {
-  name: string
-  url: string
-}
-
-export interface PokemonPurchase {
-  success: boolean
-  error?: string
-  data?: PokemonRaw
-}
-
-export interface PokemonFetch {
-  success: boolean
-  error?: string
-  data?: Pokemon[]
+  image: string
+  stats: Stat[]
 }

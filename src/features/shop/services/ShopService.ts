@@ -1,27 +1,19 @@
 import { doc, collection, getDocs, setDoc, increment, where, query } from 'firebase/firestore'
 import { db } from '@/config/firebase'
-import UserService from '@/features/auth/services/UserService'
-import PokemonService from '@/features/pokedex/services/PokemonService'
+import FirebaseAuthService from '@/features/auth/services/FirebaseAuthService'
+import PokeAPI from '@/features/pokedex/services/PokeAPI'
 import { PRICE, REFUND } from '../constants'
-import type { Pokemon, PokemonPurchase } from '@/types/pokemon'
+import type { PokemonParsedData } from '@/types/pokemon'
+import type { PokedexResponse } from '@/features/pokedex/types/response'
 
 export default class ShopService {
-  private static instance: ShopService | null = null
-  private userService = UserService.getInstance()
-  private pokemonService = PokemonService.getInstance()
+  constructor(
+    private authService: FirebaseAuthService,
+    private pokemonAPI: PokeAPI,
+  ) {}
 
-  private constructor() {}
-
-  static getInstance(): ShopService {
-    if (!ShopService.instance) {
-      ShopService.instance = new ShopService()
-    }
-
-    return ShopService.instance
-  }
-
-  public async purchaseRandomPokemon(uid: string): Promise<PokemonPurchase> {
-    const userInfo = await this.userService.getUser(uid)
+  public async purchaseRandomPokemon(uid: string): Promise<PokedexResponse> {
+    const userInfo = await this.authService.getUser(uid)
 
     if (!userInfo.exists) {
       return {
@@ -30,7 +22,7 @@ export default class ShopService {
       }
     }
 
-    const randomPokemon = await this.pokemonService.getRandomPokemon()
+    const randomPokemon = await this.pokemonAPI.getPokemonByRandomId()
 
     if (userInfo.data!.coins < PRICE) {
       return {
@@ -66,20 +58,31 @@ export default class ShopService {
         }
       }
 
+      const { images, ...pokemon } = randomPokemon
+      const image = images?.[0]?.sprites?.other?.['official-artwork']?.front_default ?? ''
+
+      const obj = {
+        ...pokemon,
+        image,
+      }
+
       await setDoc(doc(collection(db, 'users', userInfo.data!.uid, 'rawPokedex')), {
-        ...randomPokemon,
+        ...obj,
         caughtAt: new Date(),
       })
 
       return {
         success: true,
-        data: randomPokemon,
+        pokemons: obj,
       }
     }
   }
 
-  public async purchasePokemon(uid: string, pokemons: Pokemon[]): Promise<PokemonPurchase> {
-    const userInfo = await this.userService.getUser(uid)
+  public async purchasePokemon(
+    uid: string,
+    pokemons: PokemonParsedData[],
+  ): Promise<PokedexResponse> {
+    const userInfo = await this.authService.getUser(uid)
 
     if (!userInfo.exists) {
       return {
@@ -104,8 +107,7 @@ export default class ShopService {
 
     const pokemonPromises = pokemons.map((pokemon) => {
       return setDoc(doc(collection(db, 'users', userInfo.data!.uid, 'rawPokedex')), {
-        name: pokemon.name,
-        url: 'https://pokeapi.co/api/v2/pokemon/' + pokemon.id,
+        ...pokemon,
         caughtAt: new Date(),
       })
     })

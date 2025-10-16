@@ -1,23 +1,12 @@
 import { doc, setDoc, increment } from 'firebase/firestore'
 import { db } from '@/config/firebase'
-import UserService from '@/features/auth/services/UserService'
+import FirebaseAuthService from '@/features/auth/services/FirebaseAuthService'
 
 export default class MinigameService {
-  private static instance: MinigameService | null = null
-  private userService = UserService.getInstance()
-
-  constructor() {}
-
-  static getInstance(): MinigameService {
-    if (!MinigameService.instance) {
-      MinigameService.instance = new MinigameService()
-    }
-
-    return MinigameService.instance
-  }
+  constructor(private authService: FirebaseAuthService) {}
 
   public async guessThePokemonMinigame(uid: string) {
-    const userInfo = await this.userService.getUser(uid)
+    const userInfo = await this.authService.getUser(uid)
 
     if (!userInfo.exists) {
       return {

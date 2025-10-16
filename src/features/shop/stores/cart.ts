@@ -1,10 +1,10 @@
 import { ref, computed } from 'vue'
 import type { Ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { Pokemon } from '@/types/pokemon'
+import type { PokemonParsedData } from '@/types/pokemon'
 import { PRICE } from '../constants'
 
-export interface PokemonCart extends Pokemon {
+export interface PokemonCart extends PokemonParsedData {
   price: number
 }
 
@@ -19,12 +19,12 @@ export const useCart = defineStore(
 
     const cartLength = computed(() => cart.value.length)
 
-    const pokemonInCart = computed(() => (pokemon: Pokemon) => {
-      return cart.value.some((p: Pokemon) => p.id === pokemon.id)
+    const pokemonInCart = computed(() => (pokemon: PokemonParsedData) => {
+      return cart.value.some((p: PokemonParsedData) => p.id === pokemon.id)
     })
 
-    function addPokemon(pokemon: Pokemon) {
-      const pokemonInCart = cart.value.find((p: Pokemon) => p.id === pokemon.id)
+    function addPokemon(pokemon: PokemonParsedData) {
+      const pokemonInCart = cart.value.find((p: PokemonParsedData) => p.id === pokemon.id)
 
       if (!pokemonInCart) {
         cart.value.push({
@@ -34,8 +34,8 @@ export const useCart = defineStore(
       }
     }
 
-    function removePokemon(pokemon: Pokemon) {
-      cart.value = cart.value.filter((p: Pokemon) => p.id !== pokemon.id)
+    function removePokemon(pokemon: PokemonParsedData) {
+      cart.value = cart.value.filter((p: PokemonParsedData) => p.id !== pokemon.id)
     }
 
     function clearCart() {

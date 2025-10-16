@@ -11,12 +11,15 @@ import { firebaseApp } from './config/firebase'
 import PrimeVue from 'primevue/config'
 import { CustomPreset } from './config/primevue'
 import ToastService from 'primevue/toastservice'
+/* Apollo */
+import { apolloPlugin } from './graphql/apollo'
 
 const app = createApp(App)
 const pinia = createPinia()
 
 pinia.use(piniaPluginPersistedstate)
 
+app.use(apolloPlugin)
 app.use(pinia)
 app.use(router)
 app.use(VueFire, {
