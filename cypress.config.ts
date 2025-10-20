@@ -2,7 +2,8 @@ import 'dotenv/config'
 import { defineConfig } from 'cypress'
 import admin from 'firebase-admin'
 import { plugin as cypressFirebasePlugin } from 'cypress-firebase'
-import serviceAccountKey from './serviceAccountKey.json'
+
+const serviceAccountKey = JSON.parse(process.env.SERVICE_ACCOUNT_KEY!)
 
 export default defineConfig({
   env: {

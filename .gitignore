@@ -16,8 +16,6 @@ coverage
 
 .env
 
-serviceAccountKey.json
-
 
 /cypress/videos/
 /cypress/screenshots/
