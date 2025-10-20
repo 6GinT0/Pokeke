@@ -15,7 +15,12 @@ export const useShopActions = () => {
   const { shopService } = useServices()
 
   async function handleRandomPokemonPurchase() {
-    if (!user.value) return
+    if (!user.value)
+      return toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'You must be logged in to purchase a random pokemon!',
+      })
 
     const { success, pokemons, error } = await shopService.purchaseRandomPokemon(user.value.uid)
 
@@ -30,7 +35,12 @@ export const useShopActions = () => {
   }
 
   async function handlePurchasePokemons() {
-    if (!user.value) return
+    if (!user.value)
+      return toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'You must be logged in to purchase a random pokemon!',
+      })
 
     const { success, error } = await shopService.purchasePokemon(user.value!.uid, cart.value)
 
